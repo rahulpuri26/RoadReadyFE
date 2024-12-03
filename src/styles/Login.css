@@ -1,9 +1,9 @@
+
 /* General Page Styling */
 .login-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  flex-direction: column; /* Changed from flex to column to stack navbar and content */
+  min-height: 100vh; /* Changed from height to min-height */
   background-color: #f7f9fc;
   font-family: 'Arial', sans-serif;
 }
@@ -18,6 +18,8 @@
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto; /* Center the container and add some vertical margin */
+  flex-grow: 1; /* Allow container to take remaining space */
 }
 
 .login-form-container {
@@ -34,7 +36,7 @@
 .login-subtitle {
   font-size: 14px;
   color: #777;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .input-group {
@@ -74,9 +76,9 @@
   cursor: pointer;
   position: absolute;
   right: 12px;
-  font-size: 20px; /* Adjust icon size */
-  top: 50%; /* Vertically center the icon */
-  transform: translateY(-50%); /* Perfectly center the icon vertically */
+  font-size: 20px; 
+  top: 50%;
+  transform: translateY(-50%); 
 }
 
 .password-toggle-btn:hover {
@@ -84,7 +86,7 @@
 }
 
 .password-group input {
-  padding-right: 40px; /* Space for the icon */
+  padding-right: 40px; 
   font-size: 16px;
 }
 
@@ -143,11 +145,13 @@
   border-radius: 10px;
 }
 
-/* Responsive Design */
+/* Updated Responsive Design */
 @media screen and (max-width: 768px) {
   .login-container {
+    width: 90%; /* Slightly wider on smaller screens */
     flex-direction: column;
     padding: 20px;
+    margin: 10px auto; /* Reduced margin on smaller screens */
   }
 
   .login-form-container {

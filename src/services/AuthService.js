@@ -55,6 +55,6 @@ const getProtectedData = async () => {
   }
 };
 
-// Optional: Token refresh logic or logout can be added if needed
+
 
 export { login, getProtectedData };

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
-import "../styles/Home.css"; // Make sure this file exists
-import heroImage from "../assets/hero_banner.jpg"; // Add a suitable hero image to assets
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar"; 
+import Footer from "../components/Footer";
+import "../styles/Home.css";
+import heroImage from "../assets/hero_banner.jpg";
 
 const Home = () => {
   const [reviews, setReviews] = useState([]);
-  const navigate = useNavigate(); // Initialize the navigate hook for page navigation
+  const navigate = useNavigate();
 
-  // Fetch reviews from the backend
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get("https://localhost:7087/api/Review"); // Replace with your actual API endpoint
+        const response = await axios.get("https://localhost:7087/api/Review");
         setReviews(response.data);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -22,20 +23,20 @@ const Home = () => {
     fetchReviews();
   }, []);
 
-  // Handle click on Book Your Reservation button
   const handleReservationClick = () => {
-    const token = localStorage.getItem("token"); // Check if the user is logged in by checking localStorage for token
+    const token = localStorage.getItem("token");
     if (token) {
-      // If logged in, navigate to the dashboard
-      navigate("/dashboard");
+      navigate("/user-dashboard");
     } else {
-      // If not logged in, navigate to the login page
       navigate("/login");
     }
   };
 
   return (
     <div className="home-page">
+      {/* Navbar */}
+      <Navbar />
+
       {/* Hero Section */}
       <div className="hero-section">
         <img src={heroImage} alt="Hero" className="hero-image" />
@@ -44,7 +45,6 @@ const Home = () => {
           <p className="hero-subtitle">
             Your trusted car rental service for every journey.
           </p>
-          {/* Book Reservation Button */}
           <button className="book-reservation-btn" onClick={handleReservationClick}>
             Book Your Reservation
           </button>
@@ -61,7 +61,7 @@ const Home = () => {
           </div>
           <div className="service-card">
             <h3>Flexible Booking</h3>
-            <p>Book your car with flexible options for pick-up and drop-off locations.</p>
+            <p>Book your car with flexible options for pick-up and drop-off dates.</p>
           </div>
           <div className="service-card">
             <h3>24/7 Support</h3>
@@ -70,9 +70,9 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Customer Reviews Section */}
+      {/* Reviews Section */}
       <section className="reviews-section">
-        <h2 className="section-title">Customer Reviews</h2>
+        <h2 className="section-title">Testimonials By Our Customers</h2>
         <div className="reviews-carousel">
           {reviews.map((review) => (
             <div key={review.reviewId} className="review-card">
@@ -85,12 +85,7 @@ const Home = () => {
           ))}
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>© 2024 RoadReady. All rights reserved.</p>
-        <p>Contact us: support@roadready.com</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

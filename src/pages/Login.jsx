@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // To handle navigation
-import "../styles/Login.css"; // Ensure you create appropriate styles
-import carImage from "../assets/logincar.png"; // Your car image
+import { useNavigate } from "react-router-dom"; 
+import "../styles/Login.css"; 
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import carImage from "../assets/logincar.png"; 
 
 function Login() {
-  const [username, setUsername] = useState(""); // Username input
-  const [password, setPassword] = useState(""); // Password input
-  const [errorMessage, setErrorMessage] = useState(""); // Error message state
-  const [passwordVisible, setPasswordVisible] = useState(false); // Password visibility toggle
+  const [username, setUsername] = useState(""); 
+  const [password, setPassword] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState(""); 
+  const [passwordVisible, setPasswordVisible] = useState(false); 
 
-  const navigate = useNavigate(); // Initialize navigate hook for navigation
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,7 +25,17 @@ function Login() {
     try {
       const response = await axios.post("https://localhost:7087/api/Authentication/login", loginData);
       localStorage.setItem("token", response.data.token); // Store JWT token
-      window.location.href = "/dashboard"; // Redirect to dashboard after successful login
+
+      // Decode the JWT token to get the role and redirect accordingly
+      const payload = JSON.parse(atob(response.data.token.split(".")[1])); // Decode the JWT payload
+      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]; // Get role from the payload
+
+      // Redirect based on the role
+      if (role === "Admin") {
+        navigate("/admin-dashboard"); // Redirect to Admin Dashboard
+      } else {
+        navigate("/user-dashboard"); // Redirect to User Dashboard
+      }
     } catch (error) {
       setErrorMessage("Invalid credentials, please try again.");
     }
@@ -34,15 +46,16 @@ function Login() {
     setPasswordVisible(!passwordVisible);
   };
 
-  // Redirect to the registration page
+  // Redirect to Register page
   const redirectToRegister = () => {
-    navigate("/register"); // Navigates to the register page
+    navigate("/Register");
   };
 
   return (
+    
     <div className="login-page">
+       <Navbar />
       <div className="login-container">
-        {/* Login Form */}
         <div className="login-form-container">
           <h2 className="login-title">Login to Your Account</h2>
           <p className="login-subtitle">Welcome back to RoadReady!</p>
@@ -63,7 +76,7 @@ function Login() {
               <label htmlFor="password">Password</label>
               <div className="password-input-container">
                 <input
-                  type={passwordVisible ? "text" : "password"} // Toggle between password and text
+                  type={passwordVisible ? "text" : "password"} 
                   id="password"
                   placeholder="Enter your password"
                   value={password}
@@ -75,7 +88,6 @@ function Login() {
                   className="password-toggle-btn"
                   onClick={togglePasswordVisibility}
                 >
-                  {/* Eye Icon */}
                   {passwordVisible ? (
                     <i className="fas fa-eye-slash"></i>
                   ) : (
@@ -90,7 +102,6 @@ function Login() {
             <button type="submit" className="login-btn">Login</button>
           </form>
 
-          {/* Don't have an account? Link */}
           <div className="no-account">
             <p>
               Don't have an account?{" "}
@@ -101,11 +112,11 @@ function Login() {
           </div>
         </div>
 
-        {/* Car Image */}
         <div className="car-image-container">
           <img src={carImage} alt="Car" className="car-image" />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,0 +1,175 @@
+/* Admin Dashboard Container */
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f4f7fb; /* Light background for the whole page */
+}
+
+/* Main Dashboard Content */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.dashboard-header {
+  padding-bottom: 20px;
+}
+
+h1 {
+  font-size: 30px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Stats Section */
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  gap: 20px;
+}
+
+.stat-item {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 22%;
+}
+
+.stat-item h3 {
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+}
+
+.stat-item p {
+  font-size: 22px;
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.stat-item:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+/* Recent Activities Section */
+.recent-activities {
+  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Ensures space between items */
+}
+
+.recent-users, .recent-reviews, .recent-reservations {
+  flex: 1 1 100%;  /* Ensures they take full width on smaller screens */
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px; /* Set a fixed height */
+  overflow-y: auto;  /* Allows vertical scrolling for content overflow */
+}
+
+.recent-users h3, .recent-reviews h3, .recent-reservations h3 {
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.scrollable-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.scrollable-item {
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 5px;
+  min-width: 150px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 10px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background-color: #f7f9fc;
+}
+
+.scrollable-item:hover {
+  background-color: #e7e7e7;
+  cursor: pointer;
+}
+
+
+/* Admin Navbar */
+.admin-navbar {
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.navbar-nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+}
+
+.navbar-nav ul li {
+  margin-left: 20px;
+}
+
+.navbar-nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar-nav ul li a:hover {
+  background-color: #3498db;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Admin Content Section */
+.content-section {
+  margin-top: 30px;
+}
+

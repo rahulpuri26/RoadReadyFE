@@ -1,223 +1,263 @@
-/* General Page Styling */
 .home-page {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Hero Section */
-  .hero-section {
-    position: relative;
-    width: 100%;
-    height: 60vh;
-    overflow: hidden;
-  }
-  
-  .hero-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Dark overlay for readability */
-    display: flex;
-    flex-direction: column; /* Stack the title and subtitle vertically */
-    justify-content: center; /* Vertically center the text */
-    align-items: flex-start; /* Align text to the left */
-    padding-left: 60px; /* Space from the left edge */
-    text-align: left; /* Ensure text is aligned to the left */
-  }
-  
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 60px;
+  text-align: left;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  max-width: 80%;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  max-width: 70%;
+}
+
+.book-reservation-btn {
+  background-color: rgba(169, 169, 169, 0.7);
+  color: white;
+  font-size: 1.0rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.book-reservation-btn:hover {
+  background-color: rgba(169, 169, 169, 0.9);
+  transform: scale(1.05);
+}
+
+.services-section {
+  padding: 40px 20px;
+  background-color: #f7f9fc;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background-color: #a9a9a9;
+}
+
+.services-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+}
+
+.service-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.service-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.reviews-section {
+  padding: 40px 20px;
+  background-color: #f7f9fc;
+}
+
+.reviews-carousel {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #bbb #f7f9fc;
+}
+
+.reviews-carousel::-webkit-scrollbar {
+  height: 8px;
+  background-color: #f7f9fc;
+}
+
+.reviews-carousel::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.reviews-carousel::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+
+.reviews-carousel::-webkit-scrollbar-track {
+  background-color: #f7f9fc;
+}
+
+.review-card {
+  flex: 0 0 auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.review-card::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 80px;
+  color: rgba(169, 169, 169, 0.1);
+  z-index: 1;
+}
+
+.review-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.review-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #a9a9a9;
+}
+
+.review-body {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.review-rating {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.review-author {
+  font-size: 0.9rem;
+  color: #777;
+  font-style: italic;
+}
+
+.review-date {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 10px;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
   .hero-title {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Subtle text shadow */
-  }
-  
-  .hero-subtitle {
-    font-size: 1.5rem;
-    color: #fff;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); 
-  }
-  
-  .book-reservation-btn {
-    background-color: rgba(169, 169, 169, 0.7);
-    color: white;
-    font-size: 1.0rem;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 20px; 
-  }
-  
-  .book-reservation-btn:hover {
-    background-color: rgba(169, 169, 169, 0.9); 
-    transform: scale(1.05); 
-  }
-  
-  
-  
-  /* Services Section */
-  .services-section {
-    padding: 40px 20px;
-    background-color: #f7f9fc;
-  }
-  
-  .section-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .services-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .service-card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .service-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .service-card p {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  /* Customer Reviews Section */
-  .reviews-section {
-    padding: 40px 20px;
-    background-color: #f7f9fc;
-  }
-  
-  .reviews-carousel {
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-    overflow-x: auto; /* Enable horizontal scrolling */
-    scroll-behavior: smooth; /* Smooth scrolling */
-    padding: 20px 0;
-    width: 100%;
-  }
-  
-  .reviews-carousel::-webkit-scrollbar {
-    height: 8px; /* Adjust scrollbar height */
-  }
-  
-  .reviews-carousel::-webkit-scrollbar-thumb {
-    background-color: #bbb;
-    border-radius: 10px;
-  }
-  
-  .reviews-carousel::-webkit-scrollbar-thumb:hover {
-    background-color: #888;
-  }
-  
-  .reviews-carousel::-webkit-scrollbar-track {
-    background-color: #f7f9fc;
-  }
-  
-  .review-card {
-    flex: 0 0 auto; /* Prevent shrinking and allow horizontal alignment */
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    text-align: left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .review-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .review-body {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 10px;
-  }
-  
-  .review-rating {
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 10px;
-  }
-  
-  .review-author {
-    font-size: 0.9rem;
-    color: #777;
-    font-style: italic;
-  }
-  
-  .review-date {
-    font-size: 0.8rem;
-    color: #aaa;
-    margin-top: 10px;
-    text-align: right;
-  }
-  
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #f7f9fc;
-    font-size: 0.9rem;
-  }
-  
-  /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    .hero-title {
       font-size: 2.5rem;
-    }
-  
-    .hero-subtitle {
+  }
+
+  .hero-subtitle {
       font-size: 1.2rem;
-    }
-  
-    .hero-overlay {
-      padding-left: 20px; /* Reduce padding for smaller screens */
-    }
-  
-    .review-card {
-      width: 250px; /* Reduce card width for smaller screens */
-    }
-  
-    .services-grid {
+  }
+
+  .hero-overlay {
+      padding-left: 20px;
+  }
+
+  .review-card {
+      width: 250px;
+  }
+
+  .services-grid {
       flex-direction: column;
       align-items: center;
-    }
-  
-    .service-card {
-      width: 90%; /* Make cards take up more space on small screens */
-      max-width: 350px;
-    }
   }
-  
+
+  .service-card {
+      width: 90%;
+      max-width: 350px;
+  }
+}
