@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import UserDashboard from "./pages/UserDashboard";
+import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import Home from "./pages/Home";
 import PrivateRoute from './utils/PrivateRoute';
 

@@ -1,64 +1,145 @@
-/* Admin Navbar */
+:root {
+  --primary-gradient-start: #2c3e50;
+  --primary-gradient-end: #34495e;
+  --accent-color: #3498db;
+  --text-color: rgba(255, 255, 255, 0.9);
+  --logout-color: #e74c3c;
+  --hover-background: rgba(52, 152, 219, 0.2);
+}
+
 .admin-navbar {
-  background-color: #2c3e50;
+  background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
   color: white;
-  padding: 10px 20px;
+  padding: 1rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
   z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Navbar Title */
 .navbar-title {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
 }
 
-/* Navbar Links Container */
+.navbar-title i {
+  color: var(--accent-color);
+  transition: transform 0.3s ease;
+}
+
+.navbar-title i:hover {
+  transform: scale(1.1);
+}
+
 .navbar-nav {
   display: flex;
   align-items: center;
-  margin-left: auto; /* Push the links to the right */
+  margin-left: auto;
 }
 
-/* Navbar Links */
 .navbar-nav ul {
   list-style-type: none;
   padding: 0;
   display: flex;
-}
-
-.navbar-nav ul li {
-  margin-left: 20px; /* Space between links */
+  align-items: center;
+  margin: 0;
+  gap: 1.25rem;
 }
 
 .navbar-nav ul li a {
-  color: white;
+  color: var(--text-color);
   text-decoration: none;
-  font-size: 16px;
-  display: block;
-  padding: 8px 12px;
-  transition: background-color 0.3s ease;
-  border-radius: 5px;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: 
+    color 0.3s ease, 
+    background-color 0.3s ease;
+  position: relative;
+  font-weight: 500;
+}
+
+.navbar-nav ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .navbar-nav ul li a:hover {
-  background-color: #3498db; /* Blue hover effect */
+  color: white;
+  background-color: var(--hover-background);
 }
 
-/* Logout Button */
+.navbar-nav ul li a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
 .logout-btn {
-  padding: 10px 20px;
-  background-color: #e74c3c;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--logout-color);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.375rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-left: 20px; /* Space between the links and logout button */
+  transition: 
+    background-color 0.3s ease, 
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .logout-btn:hover {
-  background-color: #c0392b; /* Darker red for hover */
+  background-color: color-mix(in srgb, var(--logout-color) 80%, white);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logout-btn i {
+  transition: transform 0.3s ease;
+}
+
+.logout-btn:hover i {
+  transform: rotate(10deg);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .admin-navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .navbar-nav {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navbar-nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
 }

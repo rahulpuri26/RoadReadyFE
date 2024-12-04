@@ -1,213 +1,257 @@
-/* General Page Styles */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --background-color: #f4f6f9;
+  --white: #ffffff;
+  --text-color: #333;
+  --green-success: #27ae60;
+  --red-danger: #e74c3c;
+  --transition-speed: 0.3s;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 .reservations-page {
-   font-family: 'Inter', Arial, sans-serif;
-   max-width: 1500px;
-   margin: 0 auto;
-   padding: 30px;
-   background-color: #f4f6f9;
-   min-height: 100vh;
-   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-   border-radius: 12px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--background-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 h2 {
-   text-align: center;
-   color: #2c3e50;
-   font-weight: 600;
-   font-size: 32px;
-   margin-bottom: 25px;
-   position: relative;
+  text-align: center;
+  color: var(--secondary-color);
+  font-weight: 700;
+  font-size: 2rem;
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
 h2::after {
-   content: '';
-   position: absolute;
-   bottom: -10px;
-   left: 50%;
-   transform: translateX(-50%);
-   width: 80px;
-   height: 3px;
-   background-color: #3498db;
+  content: '';
+  position: absolute;
+  bottom: -0.625rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5rem;
+  height: 3px;
+  background-color: var(--primary-color);
+  transition: width var(--transition-speed) ease;
+}
+
+h2:hover::after {
+  width: 7rem;
 }
 
 .error-message {
-   color: #e74c3c;
-   text-align: center;
-   font-weight: 500;
-   margin-bottom: 15px;
+  color: var(--red-danger);
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(231, 76, 60, 0.05);
+  border-radius: 0.5rem;
 }
 
-/* Add New Reservation Button */
 .add-reservation-btn {
-   background-color: #3498db;
-   color: white;
-   border: none;
-   padding: 12px 24px;
-   font-size: 16px;
-   cursor: pointer;
-   margin-top: 20px;
-   display: block;
-   margin-left: auto; 
-   margin-right: auto; 
-   border-radius: 8px; 
-   transition: all 0.3s ease;
-   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 1.25rem auto;
+  display: block;
+  border-radius: 0.5rem; 
+  transition: 
+    background-color var(--transition-speed) ease,
+    transform var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .add-reservation-btn:hover {
-   background-color: #2980b9; 
-   transform: translateY(-2px);
-   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background-color: color-mix(in srgb, var(--primary-color) 80%, white);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Reservation Form Styles */
 .add-reservation-form {
-   background-color: white; 
-   padding: 25px;
-   border-radius: 10px; 
-   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); 
-   margin-top: 20px;
+  background-color: var(--white); 
+  padding: 1.5rem;
+  border-radius: 0.75rem; 
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.05),
+    0 5px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .add-reservation-form h3 {
-   text-align: center; 
-   color: #2c3e50; 
-   margin-bottom: 20px; 
+  text-align: center; 
+  color: var(--secondary-color); 
+  margin-bottom: 1.25rem;
+  font-weight: 600;
 }
 
 .add-reservation-form label {
-   font-size: 16px; 
-   color: #333; 
+  font-size: 1rem; 
+  color: var(--text-color); 
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .add-reservation-form input,
 .add-reservation-form select,
 .add-reservation-form textarea {
-   width: 100%; 
-   padding: 12px;
-   margin-bottom: 15px; 
-   border-radius: 6px; 
-   border: 1px solid #ddd; 
-   font-size: 14px;
+  width: 100%; 
+  padding: 0.75rem;
+  margin-bottom: 1rem; 
+  border-radius: 0.5rem; 
+  border: 1px solid #e0e0e0; 
+  font-size: 0.875rem;
+  transition: 
+    border-color var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
 }
 
-.add-reservation-form input[type="date"] {
-  padding-left: 12px;
-  padding-right: 12px;
+.add-reservation-form input:focus,
+.add-reservation-form select:focus,
+.add-reservation-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 .add-reservation-form textarea {
   resize: vertical; 
-  height: 100px; 
+  min-height: 100px; 
 }
 
-/* Form Buttons */
 .add-reservation-form button {
-  background-color: #27ae60; 
-  color: white; 
-  padding: 10px 20px; 
-  border-radius: 5px; 
+  background-color: var(--green-success); 
+  color: var(--white); 
+  padding: 0.75rem 1.25rem; 
+  border-radius: 0.5rem; 
   border: none;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.3s ease;
+  margin-top: 1rem;
+  transition: 
+    background-color var(--transition-speed) ease,
+    transform var(--transition-speed) ease;
 }
 
 .add-reservation-form button:hover {
-  background-color: #2ecc71;
+  background-color: color-mix(in srgb, var(--green-success) 80%, white);
   transform: translateY(-2px);
 }
 
-/* Cancel Button (second button) */
 .add-reservation-form button:nth-child(2) {
-  background-color: #e74c3c;
-  margin-left: 10px;
+  background-color: var(--red-danger);
+  margin-left: 0.625rem;
 }
 
 .add-reservation-form button:nth-child(2):hover {
-  background-color: #c0392b;
+  background-color: color-mix(in srgb, var(--red-danger) 80%, white);
 }
 
-/* Table Styles */
 .reservations-table {
   width: 100%; 
-  border-collapse: collapse; 
-  margin-top: 30px; 
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .reservations-table th,
 .reservations-table td {
-  padding: 12px; 
-  text-align: center; 
-  border: 1px solid #ddd; 
+  padding: 0.75rem; 
+  text-align: center;
 }
 
 .reservations-table th {
-  background-color: #3498db; 
-  color: white; 
-  font-weight: bold; 
+  background-color: var(--primary-color); 
+  color: var(--white); 
+  font-weight: 600;
 }
 
 .reservations-table td {
-  background-color: #fff;
+  background-color: var(--white);
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.reservations-table tr:hover {
-  background-color: #f1f1f1;
+.reservations-table tr:hover td {
+  background-color: rgba(52, 152, 219, 0.05);
 }
 
-/* Action Buttons in Table */
 .reservations-table .edit-btn,
 .reservations-table .delete-btn {
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.375rem;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  transition: 
+    background-color var(--transition-speed) ease,
+    transform var(--transition-speed) ease;
 }
 
 .reservations-table .edit-btn {
-  background-color: #5cb85c; /* Green background for edit button */
-  color: white;
+  background-color: #5cb85c;
+  color: var(--white);
 }
 
 .reservations-table .edit-btn:hover {
-  background-color: #4cae4c;
+  background-color: color-mix(in srgb, #5cb85c 80%, white);
+  transform: translateY(-2px);
 }
 
 .reservations-table .delete-btn {
-  background-color: #d9534f; /* Red background for delete button */
-  color: white;
+  background-color: var(--red-danger);
+  color: var(--white);
 }
 
 .reservations-table .delete-btn:hover {
-  background-color: #c9302c;
+  background-color: color-mix(in srgb, var(--red-danger) 80%, white);
+  transform: translateY(-2px);
 }
 
-/* Pagination Styles */
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  gap: 1rem;
+  margin-top: 1.25rem;
 }
 
 .pagination-controls button {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 0.75rem 1.25rem;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 0.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  margin: 0 10px;
-  transition: background-color 0.3s;
+  transition: 
+    background-color var(--transition-speed) ease,
+    transform var(--transition-speed) ease;
 }
 
 .pagination-controls button:hover:not(:disabled) {
-   background-color: #2980b9;
+   background-color: color-mix(in srgb, var(--primary-color) 80%, white);
+   transform: translateY(-2px);
 }
 
 .pagination-controls button.disabled {
@@ -216,32 +260,38 @@ h2::after {
 }
 
 .pagination-controls span {
-   font-size: 16px;
-   color: #333;
+   font-size: 1rem;
+   color: var(--text-color);
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
+   .reservations-page {
+     padding: 1rem;
+   }
+
    .add-reservation-form {
-       padding: 15px;
+     padding: 1rem;
    }
-   .reservations-table th, .reservations-table td {
-       font-size: 14px;
-       padding: 8px;
+
+   .reservations-table {
+     font-size: 0.875rem;
    }
-   .reservations-table button {
-       padding: 6px 12px;
+
+   .reservations-table th, 
+   .reservations-table td {
+     padding: 0.5rem;
    }
 }
 
 @media (max-width: 480px) {
    .add-reservation-form {
-       padding: 10px;
+     padding: 0.75rem;
    }
+
    .add-reservation-form input,
    .add-reservation-form select,
    .add-reservation-form textarea {
-       font-size: 12px;
-       padding: 8px;
+     font-size: 0.75rem;
+     padding: 0.5rem;
    }
 }
