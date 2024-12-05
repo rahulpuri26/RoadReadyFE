@@ -1,0 +1,156 @@
+/* General Styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+  }
+  
+  /* Container */
+  .book-reservations-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+              url("../assets/logincar.png") no-repeat center center fixed;
+  background-size: cover;
+    /* background-image: url('E:\Dot Net FSD Training Phase3\RoadReady Case Study\FrontEndRoadReady\frontenddev\src\assets\bookreservation.jpg'); /* Path to your background image */
+  /*background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
+  }
+  .book-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .bookreser-nav {
+    background-color: rgba(0, 123, 255, 0.85);
+    color: white;
+    padding: 15px;
+    display: flex;
+    margin-bottom: 30px;
+    justify-content: space-between;
+    align-items: right;
+    font-family: Arial, sans-serif;
+}
+.bookreser-nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .bookreser-nav a:hover {
+    text-decoration: underline;
+  }
+  .book-reservations-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  
+  /* Cars Grid */
+  .cars-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  /* Car Card */
+  .car-card {
+    background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  width: 250px;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .car-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .car-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .car-details {
+    padding: 15px;
+  }
+  
+  .car-details h2 {
+    margin: 0 0 10px;
+  }
+  
+  .car-details p {
+    margin: 0 0 15px;
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .car-details button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .car-details button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Booking Form */
+  .booking-form {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: 30px auto;
+    text-align: left;
+  }
+  
+  .booking-form h2 {
+    margin-top: 0;
+    color: #007bff;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+  }
+  
+  .booking-form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .booking-form button:hover {
+    background-color: #218838;
+  }
+  

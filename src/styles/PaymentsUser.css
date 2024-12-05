@@ -1,0 +1,107 @@
+/* General Styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+  }
+  
+  /* Payment Page Container */
+  .payment-page-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* Page Title */
+  .payment-page-container h1 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  
+  /* Booking Summary Section */
+  .booking-summary {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .booking-summary p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 5px 0;
+  }
+  
+  /* Payment Method Section */
+  .payment-method {
+    margin: 20px 0;
+    text-align: left;
+  }
+  
+  .payment-method label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .payment-method select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .payment-method select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Button Styling */
+  .payment-page-container button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .payment-page-container button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+  
+  .payment-page-container button:active {
+    transform: scale(1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .payment-page-container {
+      padding: 15px;
+    }
+  
+    .booking-summary p {
+      font-size: 0.9rem;
+    }
+  
+    .payment-method select {
+      font-size: 0.9rem;
+    }
+  
+    .payment-page-container button {
+      font-size: 0.9rem;
+      padding: 8px 15px;
+    }
+  }
+  

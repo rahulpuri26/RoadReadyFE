@@ -9,7 +9,7 @@ const Payments = () => {
   const [newPayment, setNewPayment] = useState({
     paymentId: 0,
     reservationId: "",
-    userId: null, // Include userId in the payment state
+    userId: null, 
     amount: "",
     paymentMethod: "Credit Card",
     status: "Pending",

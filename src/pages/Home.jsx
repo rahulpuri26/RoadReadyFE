@@ -39,7 +39,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <div className="hero-section">
-      <img src="/static/media/hero_banner.a4078f869025ea458750.jpg" alt="Hero" className="hero-image" />
+        <img src={heroImage} alt="Hero" className="hero-image" />
         <div className="hero-overlay">
           <h1 className="hero-title">Welcome to RoadReady</h1>
           <p className="hero-subtitle">

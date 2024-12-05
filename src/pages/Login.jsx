@@ -17,6 +17,15 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // Clear any previous error message
+    setErrorMessage(""); 
+
+    // Check if the fields are empty
+    if (!username || !password) {
+      setErrorMessage("Please fill in both fields.");
+      return;
+    }
+
     const loginData = {
       UserName: username,
       Password: password,
@@ -32,7 +41,7 @@ function Login() {
 
       // Redirect based on the role
       if (role === "Admin") {
-        navigate("/admin-dashboard"); // Redirect to Admin Dashboard
+        navigate("/admin-dashboard"); 
       } else {
         navigate("/user-dashboard"); // Redirect to User Dashboard
       }
@@ -52,9 +61,8 @@ function Login() {
   };
 
   return (
-    
     <div className="login-page">
-       <Navbar />
+      <Navbar />
       <div className="login-container">
         <div className="login-form-container">
           <h2 className="login-title">Login to Your Account</h2>

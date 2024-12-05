@@ -1,0 +1,121 @@
+/* General Styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+  }
+  
+  /* Container */
+  .browse-cars-container {
+    padding: 20px;
+    text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  }
+  .car-nav {
+    background-color: rgba(0, 123, 255, 0.85);
+    color: white;
+    padding: 15px;
+    display: flex;
+    margin-bottom: 30px;
+    justify-content: space-between;
+    align-items: right;
+    font-family: Arial, sans-serif;
+}
+.car-nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .car-nav a:hover {
+    text-decoration: underline;
+  }
+  /* Title */
+  .browse-cars-title {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  
+  /* Cars Grid */
+  .cars-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  /* Car Card */
+  .car-card {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: left;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .car-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Car Image */
+  .car-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  /* Car Details */
+  .car-details {
+    padding: 15px;
+  }
+  
+  .car-details h2 {
+    font-size: 1.5rem;
+    margin: 0 0 10px;
+  }
+  
+  .car-details p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin: 0 0 15px;
+  }
+  
+  /* Car Price */
+  .car-price {
+    font-size: 1.2rem;
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  /* Book Now Button */
+  .book-now-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .book-now-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Booking Message */
+  .booking-message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #28a745;
+    font-weight: bold;
+  }
+  
