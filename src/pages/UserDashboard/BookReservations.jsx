@@ -2,107 +2,41 @@ import React, { useState, useEffect } from "react";
 import "../../styles/BookReservations.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ReservationService from "../../services/ReservationService";
 import {jwtDecode} from "jwt-decode";
-import { computeHeadingLevel } from "@testing-library/react";
 
 const BookReservations = () => {
-    const [cars, setCars] = useState([]);
-    const [selectedCar, setSelectedCar] = useState(null);
-    const [pickupDate, setPickupDate] = useState("");
-    const [dropoffDate, setDropoffDate] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [user,setUser] = useState([]);
-    const [updatedUser,setUpdatedUser] = useState([]);
-    const navigate = useNavigate();
+  const [cars, setCars] = useState([]);
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [pickupDate, setPickupDate] = useState("");
+  const [dropoffDate, setDropoffDate] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchCars = async () => {
-            const token = localStorage.getItem("token"); // Check if the user is logged in by checking localStorage for token
-    
-          try {
-            const response = await axios.get("https://localhost:7087/api/Car"); // Replace with your API endpoint
-            setCars(response.data); // Assuming the API returns an array of car objects
-            setLoading(false);
-          } catch (err) {
-            console.error("Error fetching cars:", err);
-            setError("Failed to load car data. Please try again later.");
-            setLoading(false);
-          }
-        };
-    
-        fetchCars();
-      }, []);
-    
-  const handleBookNow = (car) => {
-    setSelectedCar(car);
-  };
+  useEffect(() => {
+    const fetchCars = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("You must be logged in to view this page.");
+        navigate("/login");
+        return;
+      }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    const decodedToken = jwtDecode(token); // Decode the token
-    const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+      try {
+        const response = await axios.get("https://localhost:7087/api/Car", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCars(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching cars:", err);
+        setError("Failed to load car data. Please try again later.");
+        setLoading(false);
+      }
+    };
 
-    await axios
-            .get(`https://localhost:7087/api/User/user/userName/${username}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .then(async (response) => {
-                console.log("User Details Fetched:", response.data);
-                setUser(response.data); // Store the full user details
-  
-                setUpdatedUser(response.data);
-                if (response.data){
-                  setLoading(false);
-                }
-                console.log("updateduser=========",response.data);
-  
-  
-                console.log("data=========",response.data);
-                console.log("userid==+++++++++",response.data.userId);
-
-
-                const totalAmount = calculateTotal();
-                const reservationData = {
-                  carId: selectedCar.carId,
-                  userId: response.data.userId, // Replace with the logged-in user's ID
-                  pickupDate,
-                  dropoffDate,
-                  //paymentMethod,
-                  totalAmount,
-                  status: "Booked"
-                };
-                try {
-                    console.log("data +++++++++",reservationData);
-                  const response = await axios.post(
-                    "https://localhost:7087/api/Reservation", 
-                    reservationData
-                  );
-                
-                  console.log("Response data ===+++++",response.data);
-            
-                  //const response1 = ReservationService.addReservation(reservationData);
-                  navigate("/payment", {
-                    state: {
-                      reservationId: response.data.reservationId, // Assuming the backend returns reservation ID
-                      car: selectedCar,
-                      pickupDate,
-                      dropoffDate,
-                      totalAmount,
-                    },
-                  });
-                  alert(`Booking confirmed!!!! Now You will be directed to Payments Page`);
-                } catch (err) {
-                  console.error("Error creating reservation:", err);
-                  alert("Failed to create reservation. Please try again later.");
-                }
-                // Reset form
-                setSelectedCar(null);
-                setPickupDate("");
-                setDropoffDate("");
-  })  };
+    fetchCars();
+  }, [navigate]);
 
   const calculateTotal = () => {
     if (!selectedCar || !pickupDate || !dropoffDate) return 0;
@@ -112,25 +46,100 @@ const BookReservations = () => {
     return days > 0 ? days * selectedCar.pricePerDay : 0;
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("You must be logged in to make a reservation.");
+      navigate("/login");
+      return;
+    }
+
+    if (!pickupDate || !dropoffDate || !selectedCar) {
+      setError("Please fill all fields before submitting.");
+      return;
+    }
+
+    try {
+      const decodedToken = jwtDecode(token);
+      const username =
+        decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+      const userResponse = await axios.get(
+        `https://localhost:7087/api/Users/username/${username}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const userId = userResponse.data.userId;
+
+      const totalAmount = calculateTotal();
+
+      if (totalAmount <= 0) {
+        setError("Pickup date must be before the dropoff date.");
+        return;
+      }
+
+      const reservationData = {
+        userId,
+        carId: selectedCar.carId,
+        pickupDate,
+        dropoffDate,
+        totalAmount,
+        status: "Confirmed",
+      };
+
+      const reservationResponse = await axios.post(
+        "https://localhost:7087/api/Reservation",
+        reservationData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      navigate("/payment", {
+        state: {
+          reservationId: reservationResponse.data.reservationId,
+          car: selectedCar,
+          pickupDate,
+          dropoffDate,
+          totalAmount,
+        },
+      });
+
+      alert("Booking confirmed! Redirecting to payment page.");
+      setSelectedCar(null);
+      setPickupDate("");
+      setDropoffDate("");
+    } catch (err) {
+      console.error("Error creating reservation:", err);
+      setError("Failed to create reservation. Please try again later.");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="book-reservations-container">
       <nav className="bookreser-nav">
-        <a href="/user-dashboard">Home</a>
-        <a href="/login">Logout</a>
+        <a href="/user-dashboard">Dashboard</a>
+        <a href="/">Home</a>
       </nav>
-      
+
       <h1 className="book-reservations-title">Book Your Favorite Car</h1>
       <div className="cars-grid">
         {cars.map((car) => (
-          <div key={car.id} className="car-card">
-            {/* <img src={car.image} alt={car.name} className="car-image" /> */}
+          <div key={car.carId} className="car-card">
+            <img src={car.imageUrl} alt={car.model} className="car-image" />
             <div className="car-details">
-              <h2>{car.carId}.{car.model}</h2>
-              <p>Price: ${car.pricePerDay}/day</p>
-              <button onClick={() => handleBookNow(car)}>Book Now</button>
+              <h2>
+                {car.carId}. {car.model}
+              </h2>
+              <p>Price: ₹{car.pricePerDay}/day</p>
+              <button onClick={() => setSelectedCar(car)}>Book Now</button>
             </div>
           </div>
         ))}
@@ -144,7 +153,7 @@ const BookReservations = () => {
               <strong>Selected Car:</strong> {selectedCar.model}
             </p>
             <p>
-              <strong>Price per Day:</strong> ${selectedCar.pricePerDay}
+              <strong>Price per Day:</strong> ₹{selectedCar.pricePerDay}
             </p>
             <div className="form-group">
               <label htmlFor="pickup-date">Pickup Date:</label>
@@ -166,20 +175,8 @@ const BookReservations = () => {
                 required
               />
             </div>
-            {/* <div className="form-group">
-              <label htmlFor="payment-method">Payment Method:</label>
-              <select
-                id="payment-method"
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              >
-                <option value="Credit Card">Credit Card</option>
-                <option value="PayPal">PayPal</option>
-                <option value="Bank Transfer">Bank Transfer</option>
-              </select>
-            </div> */}
             <p>
-              <strong>Total Price:</strong> ${calculateTotal()}
+              <strong>Total Price:</strong> ₹{calculateTotal()}
             </p>
             <button type="submit">Confirm Booking</button>
           </form>

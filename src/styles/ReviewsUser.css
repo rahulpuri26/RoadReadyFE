@@ -1,117 +1,303 @@
-/* General Styling */
+:root {
+  /* Color Palette */
+  --primary-color: #007bff;
+  --secondary-color: #28a745;
+  --background-color: #1a1a2e;
+  --text-color-light: #ffffff;
+  --text-color-dark: #dcdde1;
+  --card-background: rgba(249, 241, 241, 0.1);
+  --nav-background: rgba(26, 26, 46, 0.9);
+
+  /* Typography */
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-heading: 'Montserrat', sans-serif; /* For Titles and Headings */
+  --font-body: 'Open Sans', sans-serif; /* For body and card text */
+}
+
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #343a40;
-  }
-  
-  /* Container */
-  .reviews-container {
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
+  font-family: var(--font-main);
+  background-color: var(--background-color);
+  color: var(--text-color-light);
+  line-height: 1.6;
+  overflow-x: hidden;
+
+  /* Background Blur Effect */
+  background: linear-gradient(
+      rgba(26, 26, 46, 0.7), 
+      rgba(0, 0, 0, 0.9)
+    ), 
+    url("../assets/Reviewuser.jpg") no-repeat center center fixed;
+  background-size: cover;
+  backdrop-filter: blur(20px);
+}
+
+/* Reviews Container */
+.reviews-container {
+  padding: 60px 40px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7); /* Subtle overlay for better readability */
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Navigation */
+.reviews-nav {
+  background-color: var(--nav-background);
+  color: white;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  position: fixed; /* Make the navbar fixed */
+  top: 0; /* Position at the top of the page */
+  left: 0; /* Align to the left edge */
+  width: 100%; /* Take up the full width of the viewport */
+  z-index: 1000; /* Ensure the navbar is above other content */
+  backdrop-filter: blur(10px); /* Optional blur effect */
+}
+
+.reviews-nav a {
+  color: var(--text-color-light);
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.reviews-nav a:hover {
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.star-rating {
+  display: flex;
+  justify-content: center; /* Centers the stars horizontally */
+  align-items: center; /* Aligns stars vertically */
+  gap: 8px;
+  margin: 10px auto; /* Centers the stars within the parent container */
+}
+
+
+.star-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s;
+  font-size: 24px;
+}
+
+.star-button:hover {
+  transform: scale(1.1);
+}
+
+.star-button .fa-star {
+  transition: color 0.2s;
+}
+
+.star-button .text-yellow-400 {
+  color: #fbbf24;
+}
+
+.star-button .text-gray-300 {
+  color: #d1d5db;
+}
+
+.character-count {
+  font-size: 0.8rem;
+  color: #adb5bd;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  color: #adb5bd;
+  margin-top: 4px;
+}
+
+.rating-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.review-textarea {
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.write-another-review {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.write-another-review:hover {
+  background-color: #45a049;
+}
+
+.error-message {
+  color: #dc2626;
+  padding: 1rem;
+  text-align: center;
+  background-color: #fee2e2;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+/* Review Card */
+.review-card {
+  background-color: var(--card-background);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.review-image {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-right: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.review-details {
+  flex: 1;
+  text-align: left;
+  color: var(--text-color-light);
+  font-family: var(--font-body);
+}
+
+.review-details h2 {
+  margin: 0 0 15px;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.review-details p {
+  margin: 0 0 15px;
+  color: #adb5bd;
+  line-height: 1.5;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  max-width: 800px;
+  padding: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: vertical;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color-light);
+  transition: all 0.3s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Submit Button */
+.submit-button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-top: 25px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.submit-button:hover {
+  background-color: #218838;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Thank You Message */
+.thank-you-message {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.thank-you-message h2 {
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+  .review-card {
+    flex-direction: column;
     text-align: center;
   }
+
+  .review-image {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
   .reviews-nav {
-    background-color: rgba(0, 123, 255, 0.85);
-    color: white;
-    padding: 15px;
-    display: flex;
-    margin-bottom: 30px;
-    justify-content: space-between;
-    align-items: right;
-    font-family: Arial, sans-serif;
-}
-.reviews-nav a {
-    color: white;
-    margin: 0 10px;
-    text-decoration: none;
-    font-weight: bold;
+    flex-direction: column;
+    text-align: center;
   }
-  
-  .reviews-nav a:hover {
-    text-decoration: underline;
+
+  .reviews-nav a {
+    margin: 10px 0;
   }
+
   .reviews-title {
     font-size: 2.5rem;
-    color: #007bff;
-    margin-bottom: 20px;
   }
-  
-  /* Review Card */
-  .review-card {
-    background-color: white;
-    border: 1px solid #dee2e6;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-  }
-  
-  .review-image {
-    width: 120px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 15px;
-  }
-  
-  .review-details {
-    flex: 1;
-    text-align: left;
-  }
-  
-  .review-details h2 {
-    margin: 0 0 10px;
-  }
-  
-  .review-details p {
-    margin: 0 0 15px;
-    color: #6c757d;
-  }
-  
-  textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    font-size: 1rem;
-    resize: vertical;
-    height: 80px;
-  }
-  
-  textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-  
-  /* Submit Button */
-  .submit-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 20px;
-  }
-  
-  .submit-button:hover {
-    background-color: #218838;
-  }
-  
-  /* Thank You Message */
-  .thank-you-message {
-    margin-top: 50px;
-  }
-  
-  .thank-you-message h2 {
-    font-size: 2rem;
-    color: #28a745;
-  }
-  
+}

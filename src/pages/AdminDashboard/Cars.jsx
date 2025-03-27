@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../../styles/Cars.css";  
+import "../../styles/Cars.css";
 
 const Cars = () => {
   const [cars, setCars] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [carsPerPage] = useState(5); 
+  const [carsPerPage] = useState(5);
   const [editingCar, setEditingCar] = useState(null);
   const [newCar, setNewCar] = useState({
     carId: 0,
@@ -24,7 +24,7 @@ const Cars = () => {
   // Fetch cars from the server
   useEffect(() => {
     const fetchCars = async () => {
-      const token = localStorage.getItem("token"); // Fetch the token from localStorage
+      const token = localStorage.getItem("token");
       if (!token) {
         setError("You need to login first.");
         return;
@@ -33,7 +33,7 @@ const Cars = () => {
       try {
         const response = await axios.get("https://localhost:7087/api/Car", {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the header
+            Authorization: `Bearer ${token}`,
           },
         });
         setCars(response.data);
@@ -44,11 +44,11 @@ const Cars = () => {
     };
 
     fetchCars();
-  }, []); // Fetch the cars when the component mounts
+  }, []);
 
   // Add new car functionality
   const handleAddCar = async () => {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
     if (!token) {
       setError("You need to login first.");
       return;
@@ -57,13 +57,13 @@ const Cars = () => {
     try {
       const response = await axios.post("https://localhost:7087/api/Car", newCar, {
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
-      setCars([...cars, response.data]); 
-      setShowAddForm(false); 
+      setCars([...cars, response.data]);
+      setShowAddForm(false);
       setNewCar({
-        carId: 0, 
+        carId: 0,
         make: "",
         model: "",
         year: "",
@@ -72,7 +72,7 @@ const Cars = () => {
         availabilityStatus: "Available",
         description: "",
         imageUrl: "",
-      }); // Clear form
+      });
     } catch (err) {
       setError("Failed to add car.");
       console.error(err);
@@ -81,7 +81,7 @@ const Cars = () => {
 
   // Delete car functionality
   const handleDelete = async (carId) => {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
     if (!token) {
       setError("You need to login first.");
       return;
@@ -91,7 +91,7 @@ const Cars = () => {
       try {
         await axios.delete(`https://localhost:7087/api/Car/${carId}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the header
+            Authorization: `Bearer ${token}`,
           },
         });
         setCars(cars.filter((car) => car.carId !== carId));
@@ -104,7 +104,7 @@ const Cars = () => {
 
   // Save car after editing
   const handleSaveEdit = async (editedCar) => {
-    const token = localStorage.getItem("token"); // Fetch the token from localStorage
+    const token = localStorage.getItem("token");
     if (!token) {
       setError("You need to login first.");
       return;
@@ -113,7 +113,7 @@ const Cars = () => {
     try {
       await axios.put("https://localhost:7087/api/Car", editedCar, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the header
+          Authorization: `Bearer ${token}`,
         },
       });
       setCars(cars.map((car) => (car.carId === editedCar.carId ? editedCar : car)));

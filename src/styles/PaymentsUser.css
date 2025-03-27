@@ -1,107 +1,209 @@
-/* General Styling */
+:root {
+  /* Color Palette */
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-light: #f4f6f7;
+  --text-dark: #2c3e50;
+  --accent-color: #e74c3c;
+  
+  /* Typography */
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #343a40;
-  }
-  
-  /* Payment Page Container */
+  font-family: var(--font-main);
+  line-height: 1.6;
+  background-color: var(--background-light);
+  color: var(--text-dark);
+}
+
+/* Payment Page Container */
+.payment-page-container {
+  max-width: 900px;
+  margin: 2.5rem auto;
+  padding: 2.5rem;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-page-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+}
+
+/* Page Title */
+.payment-page-container h1 {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.payment-page-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  transform: scaleX(0.7);
+  transition: transform 0.3s ease;
+}
+
+.payment-page-container h1:hover::after {
+  transform: scaleX(1);
+}
+
+/* Booking Summary Section */
+.booking-summary {
+  text-align: left;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: rgba(52, 152, 219, 0.05);
+  border-radius: 10px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.booking-summary p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin: 0.75rem 0;
+  color: var(--text-dark);
+}
+
+.booking-summary p:first-child {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Payment Method Section */
+.payment-method {
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.payment-method label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+  transition: color 0.3s ease;
+}
+
+.payment-method select {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid rgba(52, 152, 219, 0.2);
+  border-radius: 8px;
+  background-color: white;
+  outline: none;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M1 4l5 5 5-5z' fill='%232c3e50'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px;
+}
+
+.payment-method select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Button Styling */
+.payment-page-container button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-page-container button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: all 0.3s ease;
+}
+
+.payment-page-container button:hover::before {
+  left: 100%;
+}
+
+.payment-page-container button:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.payment-page-container button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .payment-page-container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+      margin: 1.5rem;
+      padding: 1.5rem;
+      border-radius: 10px;
   }
-  
-  /* Page Title */
+
   .payment-page-container h1 {
-    font-size: 2rem;
-    color: #007bff;
-    margin-bottom: 20px;
+      font-size: 2rem;
   }
-  
-  /* Booking Summary Section */
-  .booking-summary {
-    text-align: left;
-    margin-bottom: 20px;
-  }
-  
+
   .booking-summary p {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin: 5px 0;
+      font-size: 1rem;
   }
-  
-  /* Payment Method Section */
-  .payment-method {
-    margin: 20px 0;
-    text-align: left;
-  }
-  
-  .payment-method label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 10px;
-  }
-  
+
   .payment-method select {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    background-color: #f8f9fa;
-    outline: none;
-    transition: border-color 0.3s ease;
+      font-size: 0.95rem;
+      padding: 0.75rem;
   }
-  
-  .payment-method select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-  
-  /* Button Styling */
+
   .payment-page-container button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+      font-size: 1rem;
+      padding: 0.9rem 1.5rem;
   }
-  
-  .payment-page-container button:hover {
-    background-color: #218838;
-    transform: scale(1.05);
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+      transition: none !important;
   }
-  
-  .payment-page-container button:active {
-    transform: scale(1);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .payment-page-container {
-      padding: 15px;
-    }
-  
-    .booking-summary p {
-      font-size: 0.9rem;
-    }
-  
-    .payment-method select {
-      font-size: 0.9rem;
-    }
-  
-    .payment-page-container button {
-      font-size: 0.9rem;
-      padding: 8px 15px;
-    }
-  }
-  
+}

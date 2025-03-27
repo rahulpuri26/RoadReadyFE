@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/ProfilePage.css";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
@@ -27,15 +27,14 @@ const ProfilePage = () => {
         const decodedToken = jwtDecode(token);
         const username =
           decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-        console.log("Decoded Token:", decodedToken);
 
         if (username) {
+          // Fetch user profile data
           const userResponse = await axios.get(
-            `https://localhost:7087/api/User/user/userName/${username}`,
+            `https://localhost:7087/api/Users/username/${username}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          console.log("User Details Fetched:", userResponse.data);
-          setUser(userResponse.data);
+          setUser({ ...userResponse.data, username }); // Include username
           setUpdatedUser(userResponse.data);
 
           const USERID = userResponse.data.userId;
@@ -45,24 +44,19 @@ const ProfilePage = () => {
             `https://localhost:7087/api/Reservation/user/${USERID}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          console.log("Reservations:", reservationsResponse.data);
-          setReservations(reservationsResponse.data.$values || []);
+          setReservations(reservationsResponse.data.$values || reservationsResponse.data || []);
 
           // Fetch payments
           const paymentsResponse = await axios.get(
             `https://localhost:7087/api/Payment/user/${USERID}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          console.log("Payments:", paymentsResponse.data);
-          setPayments(paymentsResponse.data.$values || []);
-
+          setPayments(paymentsResponse.data.values || []);
           setLoading(false);
         } else {
-          console.error("Username is missing in the token payload.");
           navigate("/login");
         }
       } catch (error) {
-        console.error("Error fetching profile data:", error);
         setError("Failed to load profile data.");
         setLoading(false);
       }
@@ -81,20 +75,26 @@ const ProfilePage = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put("https://localhost:7087/api/User", updatedUser);
-      setUser(updatedUser);
-      setEditMode(false);
-      alert("Profile updated successfully.");
+      const token = localStorage.getItem("token");
+      if (token) {
+        await axios.put("https://localhost:7087/api/Users", updatedUser, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(updatedUser);
+        setEditMode(false);
+        alert("Profile updated successfully.");
+      } else {
+        navigate("/login");
+      }
     } catch (err) {
-      console.error("Error updating profile:", err);
       alert("Failed to update profile. Please try again.");
     }
   };
 
   const formatDate = (dateTimeString) => {
-    if (!dateTimeString) return "N/A"; // Handle missing dates
+    if (!dateTimeString) return "N/A";
     const date = new Date(dateTimeString);
-    if (isNaN(date)) return "Invalid Date"; // Handle invalid date parsing
+    if (isNaN(date.getTime())) return "Invalid Date";
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
@@ -108,8 +108,8 @@ const ProfilePage = () => {
   return (
     <div className="profile-container">
       <nav className="profile-nav">
-        <a href="/user-dashboard">Previous</a>
-        <a href="/login">Logout</a>
+        <a href="/user-dashboard">DashBoard</a>
+        <a href="/">Home</a>
       </nav>
 
       <h1 className="profile-title">My Profile</h1>
@@ -117,13 +117,9 @@ const ProfilePage = () => {
         <h2>Personal Information</h2>
         {editMode ? (
           <div className="profile-edit-form">
-            <input
-              type="text"
-              name="firstName"
-              value={updatedUser.firstName || ""}
-              onChange={handleInputChange}
-              placeholder="First Name"
-            />
+            <p>
+              <strong>Username:</strong> {user?.username}
+            </p>
             <input
               type="email"
               name="email"
@@ -144,7 +140,7 @@ const ProfilePage = () => {
         ) : (
           <div className="profile-info">
             <p>
-              <strong>First Name:</strong> {user?.firstName}
+              <strong>Username:</strong> {user?.username}
             </p>
             <p>
               <strong>Email:</strong> {user?.email}
@@ -156,55 +152,77 @@ const ProfilePage = () => {
           </div>
         )}
       </div>
+
+      {/* Reservation History Section */}
       <div className="profile-section">
         <h2>Reservation History</h2>
         <table className="profile-table">
           <thead>
             <tr>
+              <th>Reservation ID</th>
               <th>Pickup Date</th>
               <th>Dropoff Date</th>
-              <th>Price</th>
+              <th>Total Amount</th>
+              <th>Car Make & Model</th>
+              <th>Car Image</th>
             </tr>
           </thead>
           <tbody>
-            {reservations.length > 0 ? (
+            {reservations && reservations.length > 0 ? (
               reservations.map((reservation) => (
-                <tr key={reservation.ReservationId}>
-                  <td>{formatDate(reservation.PickupDate)}</td>
-                  <td>{formatDate(reservation.DropoffDate)}</td>
-                  <td>{reservation.TotalAmount}</td>
+                <tr key={reservation.reservationId}>
+                  <td>{reservation.reservationId}</td>
+                  <td>{formatDate(reservation.pickupDate)}</td>
+                  <td>{formatDate(reservation.dropoffDate)}</td>
+                  <td>{reservation.totalAmount}</td>
+                  <td>
+                    {reservation.car ? `${reservation.car.make} ${reservation.car.model}` : "No Car Info"}
+                  </td>
+                  <td>
+                    <img
+                      src={reservation.car?.imageUrl || "defaultImageUrl.png"}
+                      alt={`${reservation.car?.make} ${reservation.car?.model}`}
+                      style={{ width: "120px", height: "60px" }}
+                    />
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="3">No reservations found</td>
+                <td colSpan="6">No reservations found</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Payment History Section */}
       <div className="profile-section">
         <h2>Payment History</h2>
         <table className="profile-table">
           <thead>
             <tr>
+              <th>Payment ID</th>
+              <th>Reservation ID</th>
               <th>Amount</th>
-              <th>Date</th>
-              <th>Method</th>
+              <th>Payment Date</th>
+              <th>Payment Method</th>
             </tr>
           </thead>
           <tbody>
-            {payments.length > 0 ? (
-              payments.map((payment) => (
-                <tr key={payment.PaymentId}>
-                  <td>{payment.Amount}</td>
-                  <td>{formatDate(payment.PaymentDate)}</td>
-                  <td>{payment.PaymentMethod}</td>
+            {payments && payments.length > 0 ? (
+              payments.map((payment, index) => (
+                <tr key={payment.paymentId || index}>
+                  <td>{payment.paymentId}</td>
+                  <td>{payment.reservationId || "N/A"}</td>
+                  <td>{payment.amount}</td>
+                  <td>{formatDate(payment.paymentDate)}</td>
+                  <td>{payment.paymentMethod}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="3">No payments found</td>
+                <td colSpan="5">No payments found</td>
               </tr>
             )}
           </tbody>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/Register.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import carImage from "../assets/logincar.png";
-import { toast } from "react-toastify"; // Import Toastify
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,127 +17,128 @@ const Register = () => {
     phoneNumber: "",
   });
 
-  const [validationErrors, setValidationErrors] = useState({
+  const [errors, setErrors] = useState({
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
-    username: "",
     phoneNumber: "",
+    general: ""
   });
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate();
 
+  const validateField = (name, value) => {
+    let error = "";
+
+    switch (name) {
+      case "username":
+        if (!value.trim()) {
+          error = "Username is required";
+        } else if (value.trim().length < 3) {
+          error = "Username must be at least 3 characters long";
+        }
+        break;
+
+      case "email":
+        if (!value.trim()) {
+          error = "Email is required";
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+          error = "Please enter a valid email address";
+        }
+        break;
+
+      case "password":
+        if (!value) {
+          error = "Password is required";
+        } else if (value.length < 8) {
+          error = "Password must be at least 8 characters long";
+        } else if (!/[A-Z]/.test(value)) {
+          error = "Password must include at least one uppercase letter";
+        } else if (!/[a-z]/.test(value)) {
+          error = "Password must include at least one lowercase letter";
+        } else if (!/[0-9]/.test(value)) {
+          error = "Password must include at least one number";
+        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+          error = "Password must include at least one special character";
+        }
+        break;
+
+      case "confirmPassword":
+        if (!value) {
+          error = "Please confirm your password";
+        } else if (value !== formData.password) {
+          error = "Passwords do not match";
+        }
+        break;
+
+      case "phoneNumber":
+        if (!value.trim()) {
+          error = "Phone number is required";
+        } else if (!/^\d{10}$/.test(value.replace(/[-()\s]/g, ''))) {
+          error = "Please enter a valid 10-digit phone number";
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    return error;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
     }));
 
-    // Perform validation checks
-    if (name === "email") {
-      if (!/\S+@\S+\.\S+/.test(value)) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          email: "Please enter a valid email address.",
-        }));
-      } else {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          email: "",
-        }));
+    // Clear error when user starts typing
+    setErrors(prev => ({
+      ...prev,
+      [name]: "",
+      general: ""
+    }));
+
+    // Validate confirm password when password changes
+    if (name === "password" && formData.confirmPassword) {
+      const confirmPasswordError = value !== formData.confirmPassword ? "Passwords do not match" : "";
+      setErrors(prev => ({
+        ...prev,
+        confirmPassword: confirmPasswordError
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    // Validate all fields
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        newErrors[key] = error;
+        isValid = false;
       }
-    }
+    });
 
-    if (name === "password") {
-      if (value.length < 8) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          password: "Password must be at least 8 characters long.",
-        }));
-      } else if (!/[A-Z]/.test(value)) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          password: "Password must include at least one uppercase letter.",
-        }));
-      } else if (!/[a-z]/.test(value)) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          password: "Password must include at least one lowercase letter.",
-        }));
-      } else if (!/[0-9]/.test(value)) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          password: "Password must include at least one number.",
-        }));
-      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          password: "Password must include at least one special character.",
-        }));
-      } else {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          password: "",
-        }));
-      }
-    }
+    setErrors(prev => ({
+      ...prev,
+      ...newErrors
+    }));
 
-    if (name === "confirmPassword") {
-      if (value !== formData.password) {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          confirmPassword: "Passwords do not match.",
-        }));
-      } else {
-        setValidationErrors((prevErrors) => ({
-          ...prevErrors,
-          confirmPassword: "",
-        }));
-      }
-    }
-
-    if (name === "username" && value.trim() === "") {
-      setValidationErrors((prevErrors) => ({
-        ...prevErrors,
-        username: "Username is required.",
-      }));
-    } else {
-      setValidationErrors((prevErrors) => ({
-        ...prevErrors,
-        username: "",
-      }));
-    }
-
-    if (name === "phoneNumber" && value.trim() === "") {
-      setValidationErrors((prevErrors) => ({
-        ...prevErrors,
-        phoneNumber: "Phone number is required.",
-      }));
-    } else {
-      setValidationErrors((prevErrors) => ({
-        ...prevErrors,
-        phoneNumber: "",
-      }));
-    }
+    return isValid;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Check if all fields are filled before submitting
-    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword || !formData.phoneNumber) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
-    // Check for validation errors
-    if (validationErrors.email || validationErrors.password || validationErrors.confirmPassword || validationErrors.username || validationErrors.phoneNumber) {
-      toast.error("Please fix the validation errors before submitting.");
+    // Validate form
+    if (!validateForm()) {
+      toast.error("Please fix all errors before submitting");
       return;
     }
 
@@ -146,27 +148,44 @@ const Register = () => {
         Email: formData.email,
         Password: formData.password,
         PhoneNumber: formData.phoneNumber,
-        Role: "User", // Default role is "User"
+        Role: "User"
       });
 
-      setSuccessMessage("Registration successful! Redirecting to login...");
-      setErrorMessage("");
-      toast.success("Registration successful! Redirecting to login...");
+      // Show success message
+      toast.success("Registration successful! Redirecting to login...", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
 
+      // Redirect after delay
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      setErrorMessage(
-        error.response?.data?.message || "Failed to register. Please try again."
-      );
-      toast.error("Failed to register. Please try again.");
+      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
+      
+      setErrors(prev => ({
+        ...prev,
+        general: errorMessage
+      }));
     }
   };
 
   return (
     <div className="register-page">
       <Navbar />
+      <ToastContainer />
       <div className="register-container">
-        {/* Registration Form */}
         <div className="register-form-container">
           <h2 className="register-title">Create Your Account</h2>
           <p className="register-subtitle">Join RoadReady and start your journey today!</p>
@@ -180,10 +199,11 @@ const Register = () => {
                 placeholder="Enter your username"
                 value={formData.username}
                 onChange={handleChange}
-                required
+                className={errors.username ? "error-input" : ""}
               />
-              {validationErrors.username && <p className="validation-error">{validationErrors.username}</p>}
+              {errors.username && <p className="error-message">{errors.username}</p>}
             </div>
+
             <div className="input-group">
               <label htmlFor="email">Email</label>
               <input
@@ -193,10 +213,11 @@ const Register = () => {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
-                required
+                className={errors.email ? "error-input" : ""}
               />
-              {validationErrors.email && <p className="validation-error">{validationErrors.email}</p>}
+              {errors.email && <p className="error-message">{errors.email}</p>}
             </div>
+
             <div className="input-group">
               <label htmlFor="password">Password</label>
               <input
@@ -206,10 +227,11 @@ const Register = () => {
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
-                required
+                className={errors.password ? "error-input" : ""}
               />
-              {validationErrors.password && <p className="validation-error">{validationErrors.password}</p>}
+              {errors.password && <p className="error-message">{errors.password}</p>}
             </div>
+
             <div className="input-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
@@ -219,29 +241,27 @@ const Register = () => {
                 placeholder="Confirm your password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                required
+                className={errors.confirmPassword ? "error-input" : ""}
               />
-              {validationErrors.confirmPassword && (
-                <p className="validation-error">{validationErrors.confirmPassword}</p>
-              )}
+              {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
             </div>
+
             <div className="input-group">
               <label htmlFor="phoneNumber">Phone Number</label>
               <input
-                type="text"
+                type="tel"
                 id="phoneNumber"
                 name="phoneNumber"
                 placeholder="Enter your phone number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                required
+                className={errors.phoneNumber ? "error-input" : ""}
               />
-              {validationErrors.phoneNumber && <p className="validation-error">{validationErrors.phoneNumber}</p>}
+              {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
             </div>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
-            {successMessage && (
-              <div className="success-message">{successMessage}</div>
-            )}
+
+            {errors.general && <div className="error-message">{errors.general}</div>}
+            
             <button type="submit" className="register-btn">Register</button>
           </form>
         </div>

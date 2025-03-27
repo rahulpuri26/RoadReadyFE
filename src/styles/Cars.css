@@ -1,176 +1,181 @@
-/* Cars Page */
+/* Cars.css */
 .cars-page {
-  font-family: 'Inter', Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px;
-  background-color: #f4f6f9;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f0f4f8; /* Light background for the whole page */
+  padding: 20px;
+  border-radius: 10px;
 }
 
 h2 {
   text-align: center;
-  color: #2c3e50;
-  font-weight: 600;
-  margin-bottom: 25px;
-  position: relative;
+  color: #333;
 }
 
-h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background-color: #3498db;
+.error-message {
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
+.add-car-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.add-car-btn:hover {
+  background-color: #45a049;
+}
+
+/* Add Car Form Styling */
+.add-car-form {
+  background-color: #ffffff; /* White background for the form */
+  padding: 20px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 80%; /* Same width as the table */
+  max-width: 2000px; /* Maximum width */
+}
+
+.add-car-form input,
+.add-car-form select,
+.add-car-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff; /* Ensure white background for textarea */
+  color: black;
+}
+
+.add-car-form button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.add-car-form button:hover {
+  background-color: #45a049;
+}
+
+.add-car-form button:last-child {
+  background-color: #f44336;
+}
+
+.add-car-form button:last-child:hover {
+  background-color: #e53935;
+}
+
+/* Cars Table Styling */
 .cars-table {
   width: 100%;
-  border-collapse: separate; /* Use separate borders for better styling */
-  border-spacing: 0; /* Remove default spacing */
+  border-collapse: collapse;
   margin-top: 20px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  table-layout: fixed;
+  background-color: #ffffff; /* Ensure white background for textarea */
+  color: black;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.cars-table th, .cars-table td {
+.cars-table th,
+.cars-table td {
   padding: 12px;
   text-align: center;
-  border-bottom: 1px solid #e0e0e0; /* Add a bottom border for separation */
+  border: 1px solid #ddd;
 }
 
 .cars-table th {
-  background-color: #3498db;
+  background-color: #4caf50;
   color: white;
-  font-weight: 600;
 }
 
 .cars-table td {
-  background-color: white; /* Keep td background white for clarity */
+  background-color: #f9f9f9;
 }
 
-/* Pagination Controls */
+.cars-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.cars-table img {
+  max-width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 8px 16px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.edit-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.delete-btn:hover {
+  background-color: #e53935;
+}
+
+/* Prevent "Edit" button color change when editing */
+.edit-btn:focus,
+.edit-btn:active {
+  background-color: #4caf50; /* Keep the original green color */
+}
+
+/* Pagination Styling */
 .pagination-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   margin-top: 20px;
 }
 
 .pagination-controls button {
   padding: 10px 20px;
-  background-color: #3498db;
+  background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease; /* Smooth transition */
+  font-size: 16px;
+  border-radius: 5px;
+  margin: 0 10px;
 }
 
-.pagination-controls button:hover:not(:disabled) {
- background-color: #2980b9; /* Darker shade on hover */
+.pagination-controls button:hover {
+  background-color: #45a049;
 }
 
-.pagination-controls button:disabled {
- background-color: #ddd; 
- cursor: not-allowed; 
-}
-
-/* Edit/Delete buttons */
-.edit-btn, .delete-btn {
- padding: 8px 16px; /* Increased padding for better touch targets */
- border-radius: 5px; 
- cursor: pointer; 
- transition: all 0.3s ease; /* Smooth transition */
-}
-
-.edit-btn {
- background-color: #f39c12; 
- color: white; 
-}
-
-.delete-btn {
- background-color: #e74c3c; 
- color: white; 
-}
-
-.edit-btn:hover {
- background-color: #e67e22; 
-}
-
-.delete-btn:hover {
- background-color: #c0392b; 
-}
-
-/* Image Preview */
-.cars-table img {
- max-width: 100px; /* Maintain aspect ratio */
- height: auto; 
-}
-
-/* Add New Car Form */
-.add-car-form {
-  background-color: white;
-  padding: 25px; /* Inner spacing for the form */
-  border-radius: 10px; 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-  margin-top: 20px; /* Space above the form */
-}
-
-.add-car-form h3 {
-  text-align: center; /* Center the form title */
-  color: #2c3e50; /* Dark color for contrast */
-  font-weight: 600; /* Bold font for emphasis */
-  margin-bottom: 20px; /* Space below the title */
-}
-
-.add-car-form input,
-.add-car-form select {
-  width: 100%; /* Full width for inputs and selects */
-  padding: 12px; /* Padding for input fields */
-  margin-bottom: 15px; /* Space between fields */
-  border: 1px solid #ddd; /* Light border color */
-  border-radius: 6px; /* Rounded corners */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
-}
-
-.add-car-form input:focus,
-.add-car-form select:focus {
-  outline: none; /* Remove default outline */
-  border-color: #3498db; /* Change border color on focus */
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); /* Subtle shadow effect on focus */
-}
-
-.add-car-btn {
-  padding: 12px 24px; /* Increased padding for better touch targets */
-  background-color: #2ecc71; 
-  color: white; 
-  border: none; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  margin-top: 20px; 
-  transition: all 0.3s ease; /* Smooth transition */
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
-}
-
-.add-car-btn:hover {
-  background-color: #27ae60; /* Darker shade on hover */
-  transform: translateY(-2px); /* Lift effect on hover */
-}
-
-/* Error Message Styling (if needed) */
-.error-message {
-  color: #e74c3c;
-  text-align: center;
-  font-weight: 500;
-  margin-top: 10px;
-}
-/* Button Hover Effect in Form */
-.add-car-form button:hover {
- background-color :#2980b9 ; /* Darker shade on hover */
+.pagination-controls span {
+  font-size: 16px;
+  margin: 0 10px;
 }

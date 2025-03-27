@@ -26,16 +26,26 @@ const Payments = () => {
         setError("You need to login first.");
         return;
       }
-
+  
       try {
         const paymentsResponse = await axios.get("https://localhost:7087/api/Payment", {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        console.log("Payments Response:", paymentsResponse.data);
+  
         const reservationsResponse = await axios.get("https://localhost:7087/api/Reservation", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setPayments(paymentsResponse.data);
+  
+        // Check if paymentsResponse.data is an array or needs to be accessed by `.values`
+        const paymentsData = Array.isArray(paymentsResponse.data.values)
+          ? paymentsResponse.data.values
+          : Array.isArray(paymentsResponse.data)
+          ? paymentsResponse.data
+          : [];
+  
+        setPayments(paymentsData);
         setReservations(reservationsResponse.data);
       } catch (err) {
         setError("Failed to fetch data.");
@@ -44,7 +54,7 @@ const Payments = () => {
     };
     fetchData();
   }, []);
-
+  
   // Fetch reservation details by ID, including user and car details
   const fetchReservationDetails = async (reservationId) => {
     const token = localStorage.getItem("token");
@@ -102,7 +112,6 @@ const Payments = () => {
       return;
     }
   
-    // Retrieve userId from reservation details
     const selectedReservation = reservations.find(
       (res) => res.reservationId === Number(newPayment.reservationId)
     );
@@ -118,26 +127,27 @@ const Payments = () => {
     };
   
     try {
+      let updatedPayments;
       if (newPayment.paymentId === 0) {
         // Add new payment
-        await axios.post("https://localhost:7087/api/Payment", paymentPayload, {
+        const response = await axios.post("https://localhost:7087/api/Payment", paymentPayload, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        updatedPayments = [...payments, response.data]; // Append the new payment
       } else {
-        // Update payment
-        await axios.put(
-          "https://localhost:7087/api/Payment",
-          paymentPayload,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        // Update existing payment
+        const response = await axios.put("https://localhost:7087/api/Payment", paymentPayload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        updatedPayments = payments.map((payment) =>
+          payment.paymentId === response.data.paymentId ? response.data : payment
+        ); // Update the payment in the list
       }
   
-      // Fetch updated list of payments
-      const paymentsResponse = await axios.get("https://localhost:7087/api/Payment", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setPayments(paymentsResponse.data); // Update the state with the latest payments list
-  
+      // Update the payments state directly with the modified list
+      setPayments(updatedPayments);
+      
+      // Clear the form
       clearForm();
     } catch (err) {
       setError("Failed to save payment.");
@@ -272,7 +282,7 @@ const Payments = () => {
           </tr>
         </thead>
         <tbody>
-          {payments.map((payment) => (
+          {Array.isArray(payments) && payments.map((payment) => (
             <tr key={payment.paymentId}>
               <td>
                 <button onClick={() => fetchReservationDetails(payment.reservationId)}>

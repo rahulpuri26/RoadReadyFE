@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../../styles/ReviewsUser.css";
-import { jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const ReviewsPage = () => {
   const [userId, setUserId] = useState(null);
-  const [rating, setRating] = useState(""); // Rating field
-  const [comments, setComments] = useState(""); // Comments field
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [comments, setComments] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,29 +22,24 @@ const ReviewsPage = () => {
           throw new Error("User is not logged in.");
         }
 
-        // Decode the token to get the username
         const decodedToken = jwtDecode(token);
-        const username =
-          decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-        console.log("Decoded Token:", decodedToken);
-        console.log("Username:", username);
+        const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 
         if (!username) {
           throw new Error("Username not found in token.");
         }
 
-        // Fetch the userId using the username
         const userResponse = await axios.get(
-          `https://localhost:7087/api/User/user/username/${username}`,
+          `https://localhost:7087/api/Users/username/${username}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("User Details:", userResponse.data);
 
-        setUserId(userResponse.data.userId); // Store the fetched userId
+        setUserId(userResponse.data.userId);
       } catch (err) {
         console.error("Error fetching userId:", err);
+        toast.error("Failed to fetch user information. Please try again later.");
         setError("Failed to fetch user information. Please try again later.");
       }
     };
@@ -49,26 +47,43 @@ const ReviewsPage = () => {
     fetchUserId();
   }, []);
 
+  const validateReview = () => {
+    let isValid = true;
+    
+    if (rating === 0) {
+      toast.error("Please select a rating");
+      isValid = false;
+    }
+
+    if (!comments.trim()) {
+      toast.error("Please provide some comments");
+      isValid = false;
+    } else if (comments.trim().length < 10) {
+      toast.error("Comments should be at least 10 characters long");
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    try {
-      if (!userId || !rating || !comments.trim()) {
-        alert("Please provide a rating and comments before submitting.");
-        return;
-      }
+    
+    if (!validateReview()) {
+      return;
+    }
 
+    try {
       setLoading(true);
 
       const reviewData = {
-        userId, // Include userId
-        carId: 1, // Replace with a selected carId if necessary
-        rating: parseInt(rating, 10), // Ensure rating is an integer
-        comments,
+        userId,
+        carId: 1,
+        rating: rating,
+        comments: comments.trim(),
       };
 
-      console.log("Submitting Review Data:", reviewData);
-
-      const response = await axios.post(
+      await axios.post(
         "https://localhost:7087/api/Review",
         reviewData,
         {
@@ -76,25 +91,51 @@ const ReviewsPage = () => {
         }
       );
 
-      console.log("Review Submitted Successfully:", response.data);
+      toast.success("Review submitted successfully!");
       setSubmitted(true);
-      setRating(""); // Reset rating
-      setComments(""); // Reset comments
+      setRating(0);
+      setComments("");
       setLoading(false);
     } catch (err) {
       console.error("Error submitting review:", err);
-      alert("Failed to submit the review. Please try again later.");
+      toast.error("Failed to submit the review. Please try again later.");
       setLoading(false);
     }
   };
 
-  if (error) return <div>{error}</div>;
+  const StarRating = () => {
+    return (
+      <div className="star-rating">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            className={`star-button ${
+              (hoveredRating || rating) >= star ? "active" : ""
+            }`}
+            onClick={() => setRating(star)}
+            onMouseEnter={() => setHoveredRating(star)}
+            onMouseLeave={() => setHoveredRating(0)}
+          >
+            <i 
+              className={`fas fa-star ${
+                (hoveredRating || rating) >= star ? "text-yellow-400" : "text-gray-300"
+              }`}
+            ></i>
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="reviews-container">
+      <ToastContainer position="top-right" />
       <nav className="reviews-nav">
-        <a href="/user-dashboard">Home</a>
-        <a href="/login">Logout</a>
+        <a href="/user-dashboard">Dashboard</a>
+        <a href="/">Home</a>
       </nav>
 
       <h1 className="reviews-title">Post Your Review</h1>
@@ -102,19 +143,15 @@ const ReviewsPage = () => {
       {!submitted ? (
         <form onSubmit={handleSubmitReview} className="review-form">
           <div className="form-group">
-            <label htmlFor="rating">
-              <strong>Rating (1-5):</strong>
+            <label htmlFor="rating" className="rating-label">
+              <strong>Your Rating:</strong>
             </label>
-            <input
-              type="number"
-              id="rating"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-              min="1"
-              max="5"
-              required
-            />
+            <StarRating />
+            <div className="rating-text">
+              {rating > 0 ? `You rated: ${rating} star${rating !== 1 ? 's' : ''}` : 'Click to rate'}
+            </div>
           </div>
+          
           <div className="form-group">
             <label htmlFor="comments">
               <strong>Comments:</strong>
@@ -123,11 +160,21 @@ const ReviewsPage = () => {
               id="comments"
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              placeholder="Share your experience..."
+              placeholder="Share your experience... (minimum 10 characters)"
+              className="review-textarea"
+              minLength={10}
               required
             />
+            <div className="character-count">
+              {comments.length} / 10 minimum characters
+            </div>
           </div>
-          <button type="submit" className="submit-button">
+          
+          <button 
+            type="submit" 
+            className="submit-button"
+            disabled={loading}
+          >
             {loading ? "Submitting..." : "Submit Review"}
           </button>
         </form>
@@ -135,6 +182,12 @@ const ReviewsPage = () => {
         <div className="thank-you-message">
           <h2>Thank you for your feedback!</h2>
           <p>Your review has been submitted successfully.</p>
+          <button 
+            onClick={() => setSubmitted(false)} 
+            className="write-another-review"
+          >
+            Write Another Review
+          </button>
         </div>
       )}
     </div>

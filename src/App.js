@@ -5,6 +5,11 @@ import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
+import BrowseCars from "./pages/UserDashboard/BrowseCars";
+import ProfilePage from "./pages/UserDashboard/ProfilePage";
+import BookReservations from "./pages/UserDashboard/BookReservations";
+import MakeReviews from "./pages/UserDashboard/ReviewsUser"
+import MakePayments from "./pages/UserDashboard/PaymentsUser"
 import Home from "./pages/Home";
 import PrivateRoute from './utils/PrivateRoute';
 
@@ -23,7 +28,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
+       <Route
           path="/user-dashboard"
           element={
             <PrivateRoute role="User">
@@ -31,6 +36,11 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/browsecar" element={<BrowseCars/>}/>
+         <Route path="/profilepage" element={<ProfilePage/>}/>
+         <Route path="/bookreservation" element={<BookReservations/>}/>
+         <Route path="/reviews" element={<MakeReviews/>}/>
+         <Route path="/payment" element={<MakePayments/>}/>
       </Routes>
     </Router>
   );

@@ -1,144 +1,102 @@
-import React, { useState, useEffect } from "react";
-// import CarService from '../services/CarService.js';
-// import ReservationService from '../services/ReservationService.js';
-// import ReviewService from '../services/ReviewService.js';
-// import PaymentService from '../services/PaymentService.js';
-// import UserService from '../services/UserService.js'
-import "../../styles/Userdashboard.css";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode"; // Correct import for jwt-decode
+import { useNavigate } from "react-router-dom";
+import "../../styles/Userdashboard.css";
 
 const UserDashboard = () => {
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    // const [cars, setCars] = useState([]);
-    // const [reservations, setReservations] = useState([]);
-    // const [reviews, setReviews] = useState([]);
-    // const [payments, setPayments] = useState([]);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-    
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-    
-        if (!token) {
-          navigate("/login");
-        } else {
-          try {
-            const decodedToken = jwtDecode(token);
-            const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-            console.log("Decoded Token:", decodedToken);
-    
-            if (username) {
-              // Fetch user details by username
-              axios
-                .get(`https://localhost:7087/api/User/user/userName/${username}`, {
-                  headers: { Authorization: `Bearer ${token}` },
-                })
-                .then((response) => {
-                  console.log("User Details Fetched:", response.data);
-                  setUser(response.data); // Store the full user details
-                })
-                .catch((error) => {
-                  console.error("Failed to fetch user:", error);
-                  navigate("/login");
-                });
-            } else {
-              console.error("Username is missing in the token payload.");
-              navigate("/login");
-            }
-          } catch (error) {
-            console.error("Error decoding token:", error);
-            navigate("/login");
-          }
-        }
-      }, [navigate]);
-
-const handleBrowseCarClick = () => {
-    const token = localStorage.getItem("token"); // Check if the user is logged in by checking localStorage for token
-    if (token) {
-      // If logged in, navigate to the dashboard
-      navigate("/browsecar");
+    if (!token) {
+      // Redirect to login page if the token is missing
+      navigate("/login");
     } else {
-      // If not logged in, navigate to the login page
+      try {
+        // Decode the token to extract the username
+        const decodedToken = jwtDecode(token);
+        const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+        if (username) {
+          // Fetch user details by username
+          axios
+            .get(`https://localhost:7087/api/Users/username/${username}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+              setUser(response.data); // Store the full user details
+            })
+            .catch((error) => {
+              navigate("/login");
+            });
+        } else {
+          navigate("/login");
+        }
+      } catch (error) {
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Clear the token from localStorage
+    navigate("/login"); // Redirect to login page
+  };
+
+  const handleNavigation = (path) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate(path);
+    } else {
       navigate("/login");
     }
-    }
-  
-    const handleProfilePageClick = () => {
-        const token = localStorage.getItem("token"); // Check if the user is logged in by checking localStorage for token
-        if (token) {
-          // If logged in, navigate to the dashboard
-          navigate("/profilepage");
-        } else {
-          // If not logged in, navigate to the login page
-          navigate("/login");
-        }
-        }
-        const handleBookReservationClick = () => {
-            const token = localStorage.getItem("token"); // Check if the user is logged in by checking localStorage for token
-            if (token) {
-              // If logged in, navigate to the dashboard
-              navigate("/bookreservation");
-            } else {
-              // If not logged in, navigate to the login page
-              navigate("/login");
-            }
-            }
-            const handleReviewsClick = () => {
-                const token = localStorage.getItem("token"); // Check if the user is logged in by checking localStorage for token
-                if (token) {
-                  // If logged in, navigate to the dashboard
-                  navigate("/reviews");
-                } else {
-                  // If not logged in, navigate to the login page
-                  navigate("/login");
-                }
-                }
+  };
 
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
         <h1>Welcome to RoadReady</h1>
         <nav className="dashboard-nav">
-          <a href="/profilepage">Profile</a>
-          <a href="/browsecar">Browse Cars</a>
-          <a href="/login">Logout</a>
+          <button onClick={() => handleNavigation("/ProfilePage")}>Profile</button>
+          <button onClick={() => handleNavigation("/browsecar")}>Browse Cars</button>
+          <button onClick={handleLogout}>Logout</button>
         </nav>
       </header>
       <main className="dashboard-main">
         <section className="welcome-section">
-        {user ? (
-          <h2>
-            Hello, {user.firstName}! <br />
-            <span className="user-id-display">Your User ID: {user.userId}</span>
-          </h2>
-        ) : (
-          <h2>Loading...</h2>
-        )}
-          <p>Explore your favourite cars and Rent them at affordable prices !!!!</p>
+          {user ? (
+            <h2>
+              Hello, {user.firstName}! <br />
+              <span className="user-id-display">Your User ID: {user.userId}</span>
+            </h2>
+          ) : (
+            <h2>Loading...</h2>
+          )}
+          <p>Explore your favorite cars and rent them at affordable prices!</p>
         </section>
         <section className="actions-section">
           <div className="action-card">
             <h3>Book Reservations</h3>
-            <p>Make a booking for you trip.</p>
-            <button onClick = {handleBookReservationClick}>Go to Reservations</button>
+            <p>Make a booking for your trip.</p>
+            <button onClick={() => handleNavigation("/bookreservation")}>Go to Reservations</button>
           </div>
           <div className="action-card">
             <h3>Browse Cars</h3>
             <p>Explore available cars for your next trip.</p>
-            <button onClick={handleBrowseCarClick}>Browse Cars</button>
+            <button onClick={() => handleNavigation("/browsecar")}>Browse Cars</button>
           </div>
           <div className="action-card">
             <h3>Edit Profile</h3>
             <p>Update your personal information and payment methods.</p>
-            <button onClick = {handleProfilePageClick}>Edit Profile</button>
+            <button onClick={() => handleNavigation("/profilepage")}>Edit Profile</button>
           </div>
           <div className="action-card">
             <h3>Provide Reviews</h3>
-            <p>Give ratings to our Service.</p>
-            <button onClick = {handleReviewsClick}>Reviews</button>
+            <p>Give ratings to our service.</p>
+            <button onClick={() => handleNavigation("/reviews")}>Reviews</button>
           </div>
         </section>
       </main>

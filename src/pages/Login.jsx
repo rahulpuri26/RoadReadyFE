@@ -9,20 +9,53 @@ import carImage from "../assets/logincar.png";
 function Login() {
   const [username, setUsername] = useState(""); 
   const [password, setPassword] = useState(""); 
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+    general: ""
+  }); 
   const [passwordVisible, setPasswordVisible] = useState(false); 
 
   const navigate = useNavigate(); 
 
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {
+      username: "",
+      password: "",
+      general: ""
+    };
+
+    // Username validation
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
+      isValid = false;
+    } else if (username.trim().length < 3) {
+      newErrors.username = "Username must be at least 3 characters long";
+      isValid = false;
+    }
+
+    // Password validation
+    if (!password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Clear any previous error message
-    setErrorMessage(""); 
+    // Clear previous general error
+    setErrors(prev => ({ ...prev, general: "" }));
 
-    // Check if the fields are empty
-    if (!username || !password) {
-      setErrorMessage("Please fill in both fields.");
+    // Validate form
+    if (!validateForm()) {
       return;
     }
 
@@ -33,29 +66,28 @@ function Login() {
 
     try {
       const response = await axios.post("https://localhost:7087/api/Authentication/login", loginData);
-      localStorage.setItem("token", response.data.token); // Store JWT token
+      localStorage.setItem("token", response.data.token);
 
-      // Decode the JWT token to get the role and redirect accordingly
-      const payload = JSON.parse(atob(response.data.token.split(".")[1])); // Decode the JWT payload
-      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]; // Get role from the payload
+      const payload = JSON.parse(atob(response.data.token.split(".")[1]));
+      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-      // Redirect based on the role
       if (role === "Admin") {
         navigate("/admin-dashboard"); 
       } else {
-        navigate("/user-dashboard"); // Redirect to User Dashboard
+        navigate("/user-dashboard");
       }
     } catch (error) {
-      setErrorMessage("Invalid credentials, please try again.");
+      setErrors(prev => ({
+        ...prev,
+        general: "Invalid credentials, please try again."
+      }));
     }
   };
 
-  // Toggle the password visibility
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  // Redirect to Register page
   const redirectToRegister = () => {
     navigate("/Register");
   };
@@ -75,9 +107,15 @@ function Login() {
                 id="username"
                 placeholder="Enter your username"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  if (errors.username) {
+                    setErrors(prev => ({ ...prev, username: "" }));
+                  }
+                }}
+                className={errors.username ? "error-input" : ""}
               />
+              {errors.username && <div className="error-message">{errors.username}</div>}
             </div>
 
             <div className="input-group password-group">
@@ -88,8 +126,13 @@ function Login() {
                   id="password"
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errors.password) {
+                      setErrors(prev => ({ ...prev, password: "" }));
+                    }
+                  }}
+                  className={errors.password ? "error-input" : ""}
                 />
                 <button
                   type="button"
@@ -103,9 +146,10 @@ function Login() {
                   )}
                 </button>
               </div>
+              {errors.password && <div className="error-message">{errors.password}</div>}
             </div>
 
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {errors.general && <div className="error-message">{errors.general}</div>}
 
             <button type="submit" className="login-btn">Login</button>
           </form>
